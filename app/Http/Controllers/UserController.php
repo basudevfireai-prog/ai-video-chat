@@ -20,7 +20,7 @@ class UserController extends Controller
             $request->validate([
                 "name" => "required",
                 "email" => "required|email|unique:users",
-                "mobile" => "required|unique:users",
+                // "mobile" => "required|unique:users",
                 // Laravel EXPECTS to find 'password_confirmation' here
                 "password" => "required|min:8|confirmed",
             ]);
@@ -241,7 +241,7 @@ class UserController extends Controller
         }
     }
 
-    public function UserLogout()
+    public function userLogout()
     {
         return redirect("/")->cookie("user_token", "", -1);
     }
