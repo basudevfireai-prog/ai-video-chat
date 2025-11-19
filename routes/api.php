@@ -1,9 +1,13 @@
 <?php
 
 use App\Http\Controllers\AdminController;
+use App\Http\Controllers\ChatController;
 use App\Http\Controllers\RoleController;
 use App\Http\Controllers\UserController;
 use App\Http\Middleware\TokenVerificationMiddleware;
+use App\Models\User;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Route;
 
 // User Routes
@@ -25,4 +29,14 @@ Route::get('/admin-logout', [AdminController::class, 'adminLogout'])->middleware
 
 
 // Role Routes
-Route::post('/create-role', [RoleController::class, 'createRole']);
+Route::post('/create-role', [RoleController::class, 'createRole'])->middleware([TokenVerificationMiddleware::class]);
+
+
+// Chat Routes
+Route::post('/session-start', [ChatController::class, 'sessionStart'])->middleware([TokenVerificationMiddleware::class]);
+
+Route::post('/ai-chat-start', [ChatController::class, 'aiChatStart'])->middleware([TokenVerificationMiddleware::class]);
+
+Route::post('/session-played', [ChatController::class, 'sessionPlayed'])->middleware([TokenVerificationMiddleware::class]);
+
+Route::get('/home', [ChatController::class, 'home'])->middleware([TokenVerificationMiddleware::class]);
