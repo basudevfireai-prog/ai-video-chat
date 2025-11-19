@@ -4,6 +4,8 @@ use App\Http\Controllers\AdminController;
 use App\Http\Controllers\RoleController;
 use App\Http\Controllers\UserController;
 use App\Http\Middleware\TokenVerificationMiddleware;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Route;
 
 // User Routes
@@ -25,4 +27,23 @@ Route::get('/admin-logout', [AdminController::class, 'adminLogout'])->middleware
 
 
 // Role Routes
-Route::post('/create-role', [RoleController::class, 'createRole']);
+Route::post('/create-role', [RoleController::class, 'createRole'])->middleware([TokenVerificationMiddleware::class]);
+
+
+
+// Chat Routes
+Route::post('/session-start', function (Request $request) {
+    return Http::post("http://127.0.0.1:8000/api/session/create", $request->all());
+})->middleware([TokenVerificationMiddleware::class]);
+
+Route::post('/ai-chat-start', function (Request $request) {
+    return Http::post("http://127.0.0.1:8000/api/chat", $request->all());
+})->middleware([TokenVerificationMiddleware::class]);
+
+Route::post('/session-played', function (Request $request) {
+    return Http::post("http://127.0.0.1:8000/api/session/{$request->token}/played", $request->all());
+})->middleware([TokenVerificationMiddleware::class]);
+
+Route::get('/home', function () {
+    return Http::get("http://127.0.0.1:8000/");
+})->middleware([TokenVerificationMiddleware::class]);
