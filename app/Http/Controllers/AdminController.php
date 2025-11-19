@@ -17,6 +17,7 @@ class AdminController extends Controller
     }
 
    public function adminLogin(Request $request) {
+    
     try {
         $request->validate([
             'email' => 'required|email',
