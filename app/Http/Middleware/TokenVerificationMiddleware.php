@@ -49,7 +49,7 @@ class TokenVerificationMiddleware
         // If not authenticated (no token or unauthorized token), return 401 JSON
         return response()->json([
             'status' => 'failed',
-            'message' => 'Unauthorized Access. Please log in.',
+            'message' => 'Unauthorized access. Please log in.',
         ], 403);
 
     }

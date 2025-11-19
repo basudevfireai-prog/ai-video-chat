@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Hash;
 use Spatie\Permission\Contracts\Role;
 
 class RoleController extends Controller

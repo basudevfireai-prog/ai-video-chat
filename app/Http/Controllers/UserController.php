@@ -195,7 +195,7 @@ class UserController extends Controller
                         ],
                         200,
                     )
-                    ->cookie("user_token", $token, 60); // Token valid for 60 minutes
+                    ->cookie("user_token", $token, 10); // Token valid for 10 minutes
             }
         } catch (Exception $e) {
             return response()->json(
