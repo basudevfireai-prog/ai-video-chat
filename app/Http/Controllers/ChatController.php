@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\SaveTokenUsage;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Http;
@@ -64,6 +65,37 @@ class ChatController extends Controller
         return response()->json([
             'status' => 'failed',
             'message' => 'User not found'
+        ]);
+    }
+
+    public function saveTokenUsage(Request $request) {
+        $email = $request->header("email");
+        $user = User::where("email", $email)->first();
+
+        if($user){
+
+            $request->validate([
+                "session_token" => "required",
+                "prompt_tokens" => "required",
+                "completion_tokens" => "required",
+                "total_tokens" => "required",
+            ]);
+
+            SaveTokenUsage::create([
+                "user_id" => $user->id,
+                "user_name" => $user->name,
+                "user_email" => $user->email,
+                "session_token" => $request->input("session_token"),
+                "prompt_tokens" => $request->input("prompt_tokens"),
+                "completion_tokens" => $request->input("completion_tokens"),
+                "total_tokens" => $request->input("total_tokens"),
+            ]);
+
+        }
+
+        return response()->json([
+            'status' => 'failed',
+            'message' => 'Unauthorized user! Please login.'
         ]);
     }
 }

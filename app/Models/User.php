@@ -52,4 +52,9 @@ class User extends Authenticatable
             'password' => 'hashed',
         ];
     }
+
+    public function saveTokenUsage()
+    {
+        return $this->hasMany(SaveTokenUsage::class);
+    }
 }

@@ -40,3 +40,5 @@ Route::post('/ai-chat-start', [ChatController::class, 'aiChatStart'])->middlewar
 Route::post('/session-played', [ChatController::class, 'sessionPlayed'])->middleware([TokenVerificationMiddleware::class]);
 
 Route::get('/home', [ChatController::class, 'home'])->middleware([TokenVerificationMiddleware::class]);
+
+Route::post('/save-token-usage', [ChatController::class, 'saveTokenUsage'])->middleware([TokenVerificationMiddleware::class]);

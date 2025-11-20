@@ -1,0 +1,36 @@
+<?php
+
+use Illuminate\Database\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\Schema;
+
+return new class extends Migration
+{
+    /**
+     * Run the migrations.
+     */
+    public function up(): void
+    {
+        Schema::create('save_token_usages', function (Blueprint $table) {
+            $table->id();
+
+            $table->foreignId('user_id')->constrained('users')->onDelete('restrict')->onUpdate('cascade');
+            $table->string('user_name', 50);
+            $table->string('user_email', 50);
+            $table->string('session_token');
+            $table->string('prompt_tokens');
+            $table->string('completion_tokens');
+            $table->string('total_tokens');
+
+            $table->timestamps();
+        });
+    }
+
+    /**
+     * Reverse the migrations.
+     */
+    public function down(): void
+    {
+        Schema::dropIfExists('save_token_usages');
+    }
+};
