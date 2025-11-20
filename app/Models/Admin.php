@@ -18,7 +18,6 @@ class Admin extends Model
         'email',
         'password',
         'mobile',
-        'otp',
     ];
 
     protected $attributes = [

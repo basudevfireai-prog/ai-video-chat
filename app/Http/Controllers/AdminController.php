@@ -23,7 +23,7 @@ class AdminController extends Controller
             'email' => 'required|email',
             'password' => 'required'
         ]);
-
+        // dd($request);
         $admin = Admin::where('email', $request->input('email'))->first();
 
         if ($admin && Hash::check($request->input('password'), $admin->password) && $admin->hasRole('admin')) {
@@ -34,22 +34,22 @@ class AdminController extends Controller
             );
 
            return response()
-    ->json([
-        'status' => 'success',
-        'message' => 'Login successful',
-        'token' => $token,
-    ], 200)
-    ->cookie(
-        'admin_token',
-        $token,
-        60 * 24 * 30,
-        '/',
-        'localhost',   
-        false,         
-        true,          
-        false,
-        'Lax'          
-    );
+            ->json([
+                'status' => 'success',
+                'message' => 'Login successful',
+                'token' => $token,
+            ], 200)
+            ->cookie(
+                'admin_token',
+                $token,
+                60 * 24 * 30,
+                '/',
+                'localhost',   
+                false,         
+                true,          
+                false,
+                'Strict'          
+            );
         }
 
         return response()->json([

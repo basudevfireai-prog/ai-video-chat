@@ -11,10 +11,10 @@ class RoleController extends Controller
 {
     public function createRole(Request $request) {
 
-        $email = $request->header("email");
-        $admin = Admin::where("email", $email)->first();
+        // $email = $request->header("email");
+        // $admin = Admin::where("email", $email)->first();
 
-        if($admin){
+        // if($admin){
 
             $request->validate([
                 'role' => 'required|string'
@@ -27,12 +27,12 @@ class RoleController extends Controller
                 'message' => 'Role created successfully'
             ], 201);
 
-        }
+    //     }
 
-        return response()->json([
-            'status' => 'failed',
-            'message' => 'Please, login as an admin!'
-        ]);
+    //     return response()->json([
+    //         'status' => 'failed',
+    //         'message' => 'Please, login as an admin!'
+    //     ]);
 
     }
 }
