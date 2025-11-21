@@ -10,6 +10,7 @@ class SaveTokenUsage extends Model
         'user_id',
         "user_name",
         "user_email",
+        'chat_duration_seconds',
         "session_token",
         "prompt_tokens",
         "completion_tokens",

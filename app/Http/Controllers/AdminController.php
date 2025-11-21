@@ -12,12 +12,12 @@ use Illuminate\Http\Request;
 
 class AdminController extends Controller
 {
-    public function adminDashboard() {
-        return view('admin-dashboard');
-    }
+    // public function adminDashboard() {
+    //     return view('admin-dashboard');
+    // }
 
    public function adminLogin(Request $request) {
-    
+
     try {
         $request->validate([
             'email' => 'required|email',
@@ -44,11 +44,11 @@ class AdminController extends Controller
                 $token,
                 60 * 24 * 30,
                 '/',
-                'localhost',   
-                false,         
-                true,          
+                'localhost',
                 false,
-                'Strict'          
+                true,
+                false,
+                'Strict'
             );
         }
 
