@@ -53,17 +53,23 @@ class ChatController extends Controller
                     $data = $pythonResponse->json();
 
                     // 4. Save the response to DB
-                    SaveTokenUsage::updateOrCreate([
-                        'user_id' => $user->id,
-                        'user_name' => $user->name,
-                        'user_email' => $user->email,
-                        'chat_duration_seconds' => $data['chat_duration_seconds'] ?? null,
-                        'session_token' => $data['session_token'] ?? null,
-                        'prompt_tokens' => $data['prompt_tokens'] ?? null,
-                        'completion_tokens' => $data['completion_tokens'] ?? null,
-                        'total_tokens' => $data['total_tokens'] ?? null
-                    ]);
+                    SaveTokenUsage::updateOrCreate(
+            [
+                            'user_id' => $user->id,
+                            'session_token' => $data['session_token'],
+                        ],
 
+                [
+                            'user_id' => $user->id,
+                            'user_name' => $user->name,
+                            'user_email' => $user->email,
+                            'chat_duration_seconds' => $data['chat_duration_seconds'] ? (double)($data['chat_duration_seconds'] / 1000) : null,
+                            'session_token' => $data['session_token'] ?? null,
+                            'prompt_tokens' => $data['prompt_tokens'] ?? null,
+                            'completion_tokens' => $data['completion_tokens'] ?? null,
+                            'total_tokens' => $data['total_tokens'] ?? null
+                        ]
+                    );
                 }
 
                 return $pythonResponse;
