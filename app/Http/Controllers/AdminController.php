@@ -43,12 +43,6 @@ class AdminController extends Controller
                 'admin_token',
                 $token,
                 60 * 24 * 30,
-                '/',
-                'localhost',
-                false,
-                true,
-                false,
-                'Strict'
             );
         }
 
@@ -144,10 +138,10 @@ class AdminController extends Controller
                 $admin->otp = 0;
                 $admin->save();
 
-                // $token = JWTToken::passwordResetToken(
-                //     $request->input("email"),
-                //     $admin->id,
-                // );
+                $token = JWTToken::passwordResetToken(
+                    $request->input("email"),
+                    $admin->id,
+                );
 
                 return response()
                     ->json(
@@ -156,8 +150,8 @@ class AdminController extends Controller
                             "message" => "OTP verified successfully",
                         ],
                         200,
-                    );
-                    // ->cookie("admin_token", $token, 10); // Token valid for 10 minutes
+                    )
+                    ->cookie("admin_token", $token, 10); // Token valid for 10 minutes
             }
         } catch (Exception $e) {
             return response()->json(
@@ -178,6 +172,7 @@ class AdminController extends Controller
             ]);
 
             $email = $request->header("email");
+
             $password = $request->input("password");
 
             Admin::where("email", $email)->update([
