@@ -37,7 +37,7 @@ class AdminController extends Controller
             ->json([
                 'status' => 'success',
                 'message' => 'Login successful',
-                // 'token' => $token,
+                'token' => $token,
             ], 200)
             ->cookie(
                 'admin_token',
@@ -148,6 +148,7 @@ class AdminController extends Controller
                         [
                             "status" => "success",
                             "message" => "OTP verified successfully",
+                            "token" => $token,
                         ],
                         200,
                     )
@@ -175,17 +176,19 @@ class AdminController extends Controller
 
             $password = $request->input("password");
 
-            Admin::where("email", $email)->update([
+            $status = Admin::where("email", $email)->update([
                 "password" => Hash::make($password),
             ]);
 
-            return response()->json(
-                [
-                    "status" => "success",
-                    "message" => "Password reset successfully",
-                ],
-                200,
-            );
+            if ($status) {
+                return response()->json(
+                    [
+                        "status" => "success",
+                        "message" => "Password reset successfully",
+                    ],
+                    200,
+                );
+            }
         } catch (Exception $e) {
             return response()->json(
                 [

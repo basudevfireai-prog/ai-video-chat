@@ -78,6 +78,7 @@ class UserController extends Controller
                         [
                             "status" => "success",
                             "message" => "Login successful",
+                            "token" => $token,
                         ],
                         200,
                     )
@@ -182,20 +183,21 @@ class UserController extends Controller
                 $user->otp = 0;
                 $user->save();
 
-                // $token = JWTToken::passwordResetToken(
-                //     $request->input("email"),
-                //     $user->id,
-                // );
+                $token = JWTToken::passwordResetToken(
+                    $request->input("email"),
+                    $user->id,
+                );
 
                 return response()
                     ->json(
                         [
                             "status" => "success",
                             "message" => "OTP verified successfully",
+                            "token" => $token,
                         ],
                         200,
-                    );
-                    // ->cookie("user_token", $token, 10); // Token valid for 10 minutes
+                    )
+                    ->cookie("user_token", $token, 10); // Token valid for 10 minutes
             }
         } catch (Exception $e) {
             return response()->json(
