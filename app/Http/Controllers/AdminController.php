@@ -28,7 +28,7 @@ class AdminController extends Controller
 
         if ($admin && Hash::check($request->input('password'), $admin->password) && $admin->hasRole('admin')) {
 
-            $token = JWTToken::createToken(
+            $token = JWTToken::CreateToken(
                 $request->input('email'),
                 $admin->id,
             );
@@ -37,7 +37,7 @@ class AdminController extends Controller
             ->json([
                 'status' => 'success',
                 'message' => 'Login successful',
-                'token' => $token,
+                // 'token' => $token,
             ], 200)
             ->cookie(
                 'admin_token',
