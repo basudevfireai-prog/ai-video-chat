@@ -128,24 +128,36 @@ class AdminController extends Controller
                     ],
                     404,
                 );
+            } elseif ($admin->otp !== $request->input("otp")) {
+
+                return response()->json(
+                    [
+                        "status" => "failed",
+                        "message" => "Invalid OTP!",
+                    ],
+                    400,
+                );
+
             } else {
-                if ($admin->otp == $request->input("otp")) {
-                    return response()->json(
+                // OTP is valid, proceed with the desired action (e.g., password reset)
+                // Clear the OTP after successful verification
+                $admin->otp = 0;
+                $admin->save();
+
+                $token = JWTToken::passwordResetToken(
+                    $request->input("email"),
+                    $admin->id,
+                );
+
+                return response()
+                    ->json(
                         [
                             "status" => "success",
                             "message" => "OTP verified successfully",
                         ],
                         200,
-                    );
-                } else {
-                    return response()->json(
-                        [
-                            "status" => "failed",
-                            "message" => "Invalid OTP!",
-                        ],
-                        400,
-                    );
-                }
+                    )
+                    ->cookie("admin_token", $token, 10); // Token valid for 10 minutes
             }
         } catch (Exception $e) {
             return response()->json(

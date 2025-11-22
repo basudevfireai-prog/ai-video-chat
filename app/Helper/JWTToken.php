@@ -55,7 +55,7 @@ class JWTToken
             'iat' => time(), // Issued at
             'exp' => time() + 60*20, // Expiration time
             'userEmail' => $userEmail,
-            'userID' => '0',
+            'userID' => $userID ?? '0',
         ];
 
         $token = JWT::encode($payload, $key, 'HS256');
