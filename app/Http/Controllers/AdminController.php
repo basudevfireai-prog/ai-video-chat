@@ -210,7 +210,11 @@ class AdminController extends Controller
     }
 
     public function adminLogout() {
-        return redirect('/')->cookie('admin_token', '', -1);
+        return response()->json([
+            'status' => 'success',
+            'message' => 'Logged out successfully',
+        ])
+        ->cookie('admin_token', null, -1, '/', null, true, true, false, 'None');
     }
 
 }
