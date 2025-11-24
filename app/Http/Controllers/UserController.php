@@ -247,4 +247,21 @@ class UserController extends Controller
     {
         return redirect("/")->cookie("user_token", "", -1);
     }
+
+    public function userShow($id) {
+        try {
+            $user = User::findOrFail($id);
+            return response()->json([
+                "status" => "success",
+                "data" => $user,
+            ], 200);
+
+        } catch (Exception $e) {
+            return response()->json([
+                "status" => "failed",
+                "message" => "Something went wrong!",
+            ]);
+        }
+    }
+
 }

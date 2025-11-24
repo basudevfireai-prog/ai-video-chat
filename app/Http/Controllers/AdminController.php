@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Helper\JWTToken;
 use App\Mail\OTPMail;
 use App\Models\Admin;
+use App\Models\User;
 use Exception;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Mail;
@@ -215,6 +216,30 @@ class AdminController extends Controller
             'message' => 'Logged out successfully',
         ])
         ->cookie('admin_token', null, -1, '/', null, true, true, false, 'None');
+    }
+
+    public function allUsers(Request $request) {
+        try {
+            $email = $request->header("email");
+            $admin = Admin::where("email", $email)->first();
+            if(!$admin) {
+                return response()->json([
+                    'status' => 'failed',
+                    'message' => 'Please, login as an admin!',
+                ]);
+            }else{
+                $users = User::all();
+                return response()->json([
+                    'status' => 'success',
+                    'users' => $users,
+                ], 200);
+            }
+        } catch (Exception $e) {
+            return response()->json([
+                'status' => 'failed',
+                'message' => 'Something went wrong!',
+            ]);
+        }
     }
 
 }

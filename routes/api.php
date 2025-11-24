@@ -16,6 +16,7 @@ Route::post('/user-reset-password', [UserController::class, 'resetPassword'])->m
 // Route::post('/user-reset-password', [UserController::class, 'resetPassword']);
 
 Route::get('/user-logout', [UserController::class,'userLogout'])->middleware([TokenVerificationMiddleware::class]);
+Route::get('/user/{id}/show', [UserController::class,'userShow'])->middleware([TokenVerificationMiddleware::class]);
 
 // Admin Routes
 // Route::post('/admin-dashboard', [AdminController::class, 'adminDashboard'])->middleware([TokenVerificationMiddleware::class]);
@@ -26,10 +27,10 @@ Route::post('/admin-reset-password', [AdminController::class, 'resetPassword'])-
 // Route::post('/admin-reset-password', [AdminController::class, 'resetPassword']);
 Route::get('/admin-logout', [AdminController::class, 'adminLogout'])->middleware([TokenVerificationMiddleware::class]);
 
+Route::get('/all-users', [AdminController::class, 'allUsers'])->middleware([TokenVerificationMiddleware::class]);
 
 // Role Routes
-Route::post('/create-role', [RoleController::class, 'createRole']);
-
+Route::post('/create-role', [RoleController::class, 'createRole'])->middleware([TokenVerificationMiddleware::class]);
 
 // Chat Routes
 Route::post('/session-start', [ChatController::class, 'sessionStart'])->middleware([TokenVerificationMiddleware::class]);
