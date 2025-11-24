@@ -152,7 +152,16 @@ class AdminController extends Controller
                         ],
                         200,
                     )
-                    ->cookie("admin_token", $token, 10); // Token valid for 10 minutes
+                    ->cookie(
+            "admin_token",
+                    $token, 10,
+                    '/',
+                    null,
+                    true,       // secure
+                    true,       // httpOnly
+                    false,
+                    'None'      // SameSite=None
+                ); // Token valid for 10 minutes
             }
         } catch (Exception $e) {
             return response()->json(
