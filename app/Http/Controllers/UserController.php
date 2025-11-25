@@ -1,5 +1,4 @@
 <?php
-
 namespace App\Http\Controllers;
 
 use App\Helper\JWTToken;
@@ -18,26 +17,26 @@ class UserController extends Controller
         try {
             // validation
             $request->validate([
-                "name" => "required",
-                "email" => "required|email|unique:users",
+                "name"     => "required",
+                "email"    => "required|email|unique:users",
                 // "mobile" => "required|unique:users",
                 // Laravel EXPECTS to find 'password_confirmation' here
                 "password" => "required|min:8|confirmed",
             ]);
 
             $user = User::create([
-                "name" => $request->input("name"),
-                "email" => $request->input("email"),
-                "mobile" => $request->input("mobile"),
+                "name"          => $request->input("name"),
+                "email"         => $request->input("email"),
+                "mobile"        => $request->input("mobile"),
                 "hear_about_us" => $request->input("hear_about_us"),
-                "password" => Hash::make($request->input("password")),
+                "password"      => Hash::make($request->input("password")),
             ]);
 
             $user->assignRole("user");
 
             return response()->json(
                 [
-                    "status" => "success",
+                    "status"  => "success",
                     "message" => "User registered successfully",
                 ],
                 201,
@@ -45,7 +44,7 @@ class UserController extends Controller
         } catch (Exception $e) {
             return response()->json(
                 [
-                    "status" => "failed",
+                    "status"  => "failed",
                     "message" => "User registration failed! {$e->getMessage()}",
                 ],
                 500,
@@ -58,7 +57,7 @@ class UserController extends Controller
         try {
             // validation
             $request->validate([
-                "email" => "required|email",
+                "email"    => "required|email",
                 "password" => "required",
             ]);
 
@@ -76,18 +75,27 @@ class UserController extends Controller
                 return response()
                     ->json(
                         [
-                            "status" => "success",
+                            "status"  => "success",
                             "message" => "Login successful",
-                            "token" => $token,
+                            // "token" => $token,
                         ],
                         200,
                     )
-                    ->cookie("user_token", $token, 60 * 24 * 30); // 30 days
+                    ->cookie("user_token",
+                        $token,
+                        60 * 24 * 30,
+                        '/',
+                        null,
+                        true, // secure
+                        true, // httpOnly
+                        false,
+                        'None' // SameSite=None); // 30 days
+                    );
             }
 
             return response()->json(
                 [
-                    "status" => "failed",
+                    "status"  => "failed",
                     "message" => "Invalid credentials!",
                 ],
                 401,
@@ -95,7 +103,7 @@ class UserController extends Controller
         } catch (Exception $e) {
             return response()->json(
                 [
-                    "status" => "failed",
+                    "status"  => "failed",
                     "message" => "Login failed!",
                 ],
                 500,
@@ -111,13 +119,13 @@ class UserController extends Controller
                 "email" => "required|email",
             ]);
 
-            $otp = rand(1000, 9999);
+            $otp  = rand(1000, 9999);
             $user = User::where("email", $request->input("email"))->first();
 
-            if (!$user) {
+            if (! $user) {
                 return response()->json(
                     [
-                        "status" => "failed",
+                        "status"  => "failed",
                         "message" => "Email not found!",
                     ],
                     404,
@@ -132,9 +140,9 @@ class UserController extends Controller
 
                 return response()->json(
                     [
-                        "status" => "success",
+                        "status"  => "success",
                         "message" =>
-                            "4 digit OTP code has been sent to your email",
+                        "4 digit OTP code has been sent to your email",
                     ],
                     200,
                 );
@@ -142,7 +150,7 @@ class UserController extends Controller
         } catch (Exception $e) {
             return response()->json(
                 [
-                    "status" => "failed",
+                    "status"  => "failed",
                     "message" => "Failed to send OTP!",
                 ],
                 500,
@@ -156,15 +164,15 @@ class UserController extends Controller
             // validation
             $request->validate([
                 "email" => "required|email",
-                "otp" => "required",
+                "otp"   => "required",
             ]);
 
             $user = User::where("email", $request->input("email"))->first();
 
-            if (!$user) {
+            if (! $user) {
                 return response()->json(
                     [
-                        "status" => "failed",
+                        "status"  => "failed",
                         "message" => "Email not found!",
                     ],
                     404,
@@ -172,7 +180,7 @@ class UserController extends Controller
             } elseif ($user->otp !== $request->input("otp")) {
                 return response()->json(
                     [
-                        "status" => "failed",
+                        "status"  => "failed",
                         "message" => "Invalid OTP!",
                     ],
                     400,
@@ -191,18 +199,28 @@ class UserController extends Controller
                 return response()
                     ->json(
                         [
-                            "status" => "success",
+                            "status"  => "success",
                             "message" => "OTP verified successfully",
-                            "token" => $token,
+                            "token"   => $token,
                         ],
                         200,
                     )
-                    ->cookie("user_token", $token, 10); // Token valid for 10 minutes
+                    ->cookie(
+                        "user_token",
+                        $token,
+                        10,
+                        '/',
+                        null,
+                        true, // secure
+                        true, // httpOnly
+                        false,
+                        'None' // SameSite=None
+                    );     // Token valid for 10 minutes
             }
         } catch (Exception $e) {
             return response()->json(
                 [
-                    "status" => "failed",
+                    "status"  => "failed",
                     "message" => "OTP verification failed!",
                 ],
                 500,
@@ -218,7 +236,7 @@ class UserController extends Controller
                 "password" => "required|min:8|confirmed",
             ]);
 
-            $email = $request->header("email");
+            $email    = $request->header("email");
             $password = $request->input("password");
 
             User::where("email", $email)->update([
@@ -227,7 +245,7 @@ class UserController extends Controller
 
             return response()->json(
                 [
-                    "status" => "success",
+                    "status"  => "success",
                     "message" => "Password reset successfully",
                 ],
                 200,
@@ -235,7 +253,7 @@ class UserController extends Controller
         } catch (Exception $e) {
             return response()->json(
                 [
-                    "status" => "failed",
+                    "status"  => "failed",
                     "message" => "Password reset failed!",
                 ],
                 500,
@@ -245,20 +263,25 @@ class UserController extends Controller
 
     public function userLogout()
     {
-        return redirect("/")->cookie("user_token", "", -1);
+        return response()->json([
+            'status'  => 'success',
+            'message' => 'Logged out successfully',
+        ])
+            ->cookie('user_token', null, -1, '/', null, true, true, false, 'None');
     }
 
-    public function userShow($id) {
+    public function userShow(Request $request, $id)
+    {
         try {
             $user = User::findOrFail($id);
             return response()->json([
                 "status" => "success",
-                "data" => $user,
+                "data"   => $user,
             ], 200);
 
         } catch (Exception $e) {
             return response()->json([
-                "status" => "failed",
+                "status"  => "failed",
                 "message" => "Something went wrong!",
             ]);
         }

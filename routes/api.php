@@ -24,7 +24,6 @@ Route::post('/admin-login', [AdminController::class, 'adminLogin']);
 Route::post('/admin-send-otp', [AdminController::class, 'sendOtp']);
 Route::post('/admin-verify-otp', [AdminController::class, 'verifyOtp']);
 Route::post('/admin-reset-password', [AdminController::class, 'resetPassword'])->middleware([TokenVerificationMiddleware::class]);
-// Route::post('/admin-reset-password', [AdminController::class, 'resetPassword']);
 Route::get('/admin-logout', [AdminController::class, 'adminLogout'])->middleware([TokenVerificationMiddleware::class]);
 
 Route::get('/all-users', [AdminController::class, 'allUsers'])->middleware([TokenVerificationMiddleware::class]);
@@ -41,4 +40,4 @@ Route::post('/session-played', [ChatController::class, 'sessionPlayed'])->middle
 
 Route::get('/home', [ChatController::class, 'home'])->middleware([TokenVerificationMiddleware::class]);
 
-Route::post('/save-token-usage', [ChatController::class, 'saveTokenUsage'])->middleware([TokenVerificationMiddleware::class]);
+

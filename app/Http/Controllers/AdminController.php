@@ -38,12 +38,18 @@ class AdminController extends Controller
             ->json([
                 'status' => 'success',
                 'message' => 'Login successful',
-                'token' => $token,
+                // 'token' => $token,
             ], 200)
             ->cookie(
                 'admin_token',
                 $token,
                 60 * 24 * 30,
+                '/',
+                null,
+                true,       // secure
+                true,       // httpOnly
+                false,
+                'None'      // SameSite=None
             );
         }
 
@@ -155,7 +161,8 @@ class AdminController extends Controller
                     )
                     ->cookie(
             "admin_token",
-                    $token, 10,
+                    $token,
+                    10,
                     '/',
                     null,
                     true,       // secure

@@ -16,41 +16,41 @@ class TokenVerificationMiddleware
      */
     public function handle(Request $request, Closure $next): Response
     {
-        $isAuthenticated = false;
+        $token = null;
 
-        if($request->hasCookie('user_token')){
-
+        // Check user token
+        if ($request->hasCookie('user_token')) {
             $token = $request->cookie('user_token');
-            $result = JWTToken::VerifyToken($token);
+        }
 
-            if ($result != "unauthorized") {
-                $request->headers->set('email', $result->userEmail);
-                $request->headers->set('id', $result->userID);
-                $isAuthenticated = true;
-            }
-
-        } elseif ($request->hasCookie('admin_token')) {
-
+        // Check admin token
+        if ($request->hasCookie('admin_token')) {
             $token = $request->cookie('admin_token');
-            $admin_result = JWTToken::VerifyToken($token);
-
-            if ($admin_result != 'unauthorized') {
-                $request->headers->set('email', $admin_result->userEmail);
-                $request->headers->set('id', $admin_result->userID);
-                $isAuthenticated = true;
-            }
         }
 
-        // If authenticated, proceed
-        if ($isAuthenticated) {
-            return $next($request);
+        // No token
+        if (!$token) {
+            return response()->json([
+                'status' => 'failed',
+                'message' => 'Unauthorized. No token found.',
+            ], 401);
         }
 
-        // If not authenticated (no token or unauthorized token), return 401 JSON
-        return response()->json([
-            'status' => 'failed',
-            'message' => 'Unauthorized access. Please log in.',
-        ], 403);
+        // Validate token
+        $result = JWTToken::VerifyToken($token);
+
+        if ($result === "unauthorized") {
+            return response()->json([
+                'status' => 'failed',
+                'message' => 'Unauthorized. Invalid or expired token.',
+            ], 401);
+        }
+
+        // Attach user info to request
+        $request->headers->set("email", $result->userEmail);
+        $request->headers->set("id", $result->userID);
+
+        return $next($request);
 
     }
 }
