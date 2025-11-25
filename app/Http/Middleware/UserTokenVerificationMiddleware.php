@@ -7,7 +7,7 @@ use Closure;
 use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\Response;
 
-class TokenVerificationMiddleware
+class UserTokenVerificationMiddleware
 {
     /**
      * Handle an incoming request.
@@ -23,10 +23,10 @@ class TokenVerificationMiddleware
             $token = $request->cookie('user_token');
         }
 
-        // Check admin token
-        if ($request->hasCookie('admin_token')) {
-            $token = $request->cookie('admin_token');
-        }
+        // // Check admin token
+        // if ($request->hasCookie('admin_token')) {
+        //     $token = $request->cookie('admin_token');
+        // }
 
         // No token
         if (!$token) {

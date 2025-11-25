@@ -267,7 +267,7 @@ class UserController extends Controller
             'status'  => 'success',
             'message' => 'Logged out successfully',
         ])
-            ->cookie('user_token', null, -1, '/', null, true, true, false, 'None');
+        ->cookie('user_token', null, -1, '/', null, true, true, false, 'None');
     }
 
     public function userShow(Request $request, $id)
