@@ -19,7 +19,7 @@ class UserController extends Controller
             $request->validate([
                 "name"     => "required",
                 "email"    => "required|email|unique:users",
-                // "mobile" => "required|unique:users",
+                // "mobile" => "required",
                 // Laravel EXPECTS to find 'password_confirmation' here
                 "password" => "required|min:8|confirmed",
             ]);
@@ -77,7 +77,12 @@ class UserController extends Controller
                         [
                             "status"  => "success",
                             "message" => "Login successful",
-                            // "token" => $token,
+                            "token" => $token,
+                             "user"    => [
+            "id"    => $user->id,
+            "name"  => $user->name,
+            "email" => $user->email,
+        ],
                         ],
                         200,
                     )

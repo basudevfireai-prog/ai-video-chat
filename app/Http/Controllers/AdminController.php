@@ -38,7 +38,7 @@ class AdminController extends Controller
             ->json([
                 'status' => 'success',
                 'message' => 'Login successful',
-                // 'token' => $token,
+                'token' => $token,
             ], 200)
             ->cookie(
                 'admin_token',

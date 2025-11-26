@@ -30,6 +30,9 @@ Route::get('/admin-logout', [AdminController::class, 'adminLogout'])->middleware
 
 Route::get('/all-users', [AdminController::class, 'allUsers'])->middleware([AdminTokenVerificationMiddleware::class]);
 
+// Route::middleware('auth:api')->group(function() {
+//     Route::get('/all-users', ...);
+// });
 // Role Routes
 Route::post('/create-role', [RoleController::class, 'createRole'])->middleware([AdminTokenVerificationMiddleware::class]);
 

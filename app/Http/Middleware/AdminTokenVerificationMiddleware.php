@@ -18,14 +18,17 @@ class AdminTokenVerificationMiddleware
     {
         $token = null;
 
-        // // Check user token
-        // if ($request->hasCookie('user_token')) {
-        //     $token = $request->cookie('user_token');
-        // }
-
-        // Check admin token
+        // 1) From Cookie
         if ($request->hasCookie('admin_token')) {
             $token = $request->cookie('admin_token');
+        }
+
+        // 2) From Authorization: Bearer XXX
+        if (!$token && $request->header('Authorization')) {
+            $headerToken = $request->header('Authorization');
+            if (str_starts_with($headerToken, 'Bearer ')) {
+                $token = substr($headerToken, 7);
+            }
         }
 
         // No token
